@@ -6,6 +6,8 @@
     ./pkgs.nix
     ./coredns-ads.nix
     ./coredns-ads-config.nix
+    ./coredhcp.nix
+    ./coredhcp-config.nix
   ];
 
   # NixOS wants to enable GRUB by default
@@ -61,6 +63,8 @@
     (_self: super: {
       coredns-ads =
         super.callPackage ./coredns-ads-pkg.nix { };
+      coredhcp = 
+        super.callPackage ./coredhcp-pkg.nix { };
     })
   ];
 }
