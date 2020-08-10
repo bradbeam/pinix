@@ -49,6 +49,7 @@ in {
         # TODO figure out how/where dir structure is to create autoconf + lists dir
         ExecStart = "${getBin cfg.package}/bin/coredns -conf=${configFile}";
         ExecReload = "/bin/kill -SIGUSR1 $MAINPID";
+        StateDirectory = "coredns-ads/zones.d";
         Restart = "on-failure";
       };
     };

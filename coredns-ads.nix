@@ -7,6 +7,7 @@
       .:53 {
           loop
           ads {
+            # Not sure where these are/were from
             blacklist https://raw.githubusercontent.com/hectorm/hmirror/master/data/adaway.org/list.txt
             blacklist https://raw.githubusercontent.com/hectorm/hmirror/master/data/adblock-nocoin-list/list.txt
             blacklist https://raw.githubusercontent.com/hectorm/hmirror/master/data/adguard-simplified/list.txt
@@ -43,6 +44,13 @@
             blacklist https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-blocklist.txt
             blacklist https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-malware.txt
             blacklist https://www.stopforumspam.com/downloads/toxic_domains_whole.txt
+            # From pihole
+            blacklist https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+            blacklist https://mirror1.malwaredomains.com/files/justdomains
+            blacklist https://sysctl.org/cameleon/hosts
+            blacklist https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
+            blacklist https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
+            blacklist https://hosts-file.net/ad_servers.txt
             # When list-store is enabled, we get a crash
             # panic: Loading persisted blocklist from "/etc/coredns/lists" failed
             # goroutine 39 [running]:
@@ -51,12 +59,12 @@
             # created by github.com/c-mueller/ads.(*ListUpdater).Start
             #         /Users/bradbeam/go/pkg/mod/github.com/c-mueller/ads@v0.2.2/list_updater.go:44 +0xac
             # 
-            # list-store /etc/coredns/lists
+            list-store /var/lib/coredns-ads/lists
             default-lists
             log
           }
           auto neatfu.com {
-            directory /etc/coredns/zones.d
+            directory /var/lib/coredns-ads/zones.d
           }
           loadbalance round_robin
           forward . 1.1.1.1 8.8.8.8 1.0.0.1 8.8.4.4 2606:4700:4700::1111 2001:4860:4860::8888 2606:4700:4700::1001 2001:4860:4860::8844
