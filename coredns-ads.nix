@@ -51,26 +51,21 @@
             blacklist https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
             blacklist https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
             blacklist https://hosts-file.net/ad_servers.txt
-            # When list-store is enabled, we get a crash
-            # panic: Loading persisted blocklist from "/etc/coredns/lists" failed
-            # goroutine 39 [running]:
-            # github.com/c-mueller/ads.(*ListUpdater).Start.func1(0x3ca2c80)
-            #         /Users/bradbeam/go/pkg/mod/github.com/c-mueller/ads@v0.2.2/list_updater.go:60 +0x6e0
-            # created by github.com/c-mueller/ads.(*ListUpdater).Start
-            #         /Users/bradbeam/go/pkg/mod/github.com/c-mueller/ads@v0.2.2/list_updater.go:44 +0xac
-            # 
             list-store /var/lib/coredns-ads/lists
             default-lists
             log
           }
+
           auto neatfu.com {
             directory /var/lib/coredns-ads/zones.d
           }
+
           loadbalance round_robin
           forward . 1.1.1.1 8.8.8.8 1.0.0.1 8.8.4.4 2606:4700:4700::1111 2001:4860:4860::8888 2606:4700:4700::1001 2001:4860:4860::8844
           log
           errors
           prometheus :9100
+          cache
       }
     '';
   };

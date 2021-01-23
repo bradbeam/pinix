@@ -1,23 +1,40 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+with import <nixpkgs> { };
 
 buildGoModule rec {
   pname = "coredns-ads";
-  version = "1.7.0";
-
-  goPackagePath = "github.com/coredns/coredns";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
-    owner = "bradbeam";
+    owner = "coredns";
     repo = "coredns";
-    rev = "783f2ef0f0168c398bc6b31a5409787fb3b48790";
-    sha256 = "12yks59hv9xiaxldg2hw5pbyvzz0man2xdfdfmf304a1c32av64m";
+    rev = "v${version}";
+    sha256 = "04hkz70s5i7ndwyg39za3k83amvmi90rkjm8qp3w3a8fbmq4q4y6";
   };
 
-  modSha256 = "1d1k6cmajw9rh82p4qp5sm814q3qzdmzv7pp1jsm0z4kg7bbildp";
+  vendorSha256 = "1h1xcygwvpm4m6wlrv62x3kzrygc3yhydcmnvnds0bmkdga3y975";
+
+  doCheck = false;
+
+  # Add ads plugin to coredns
+  #patches = [
+  #  ./ads-plugin.patch
+  #];
+
+  overrideModAttrs = (old: {
+    preBuild = ''
+      go mod edit -require=github.com/c-mueller/ads@v0.2.5-0.20201010140624-51e1b415ae8f
+    '';
+  });
+
+  preBuild = ''
+    sed -i '/^transfer:/a ads:github.com/c-mueller/ads' plugin.cfg
+    go generate
+  '';
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/mdlayher/corerad";
-    description = "CoreDNS ads DNS server build with ads plugin";
+    homepage = "https://coredns.io";
+    description = "A DNS server that runs middleware";
     license = licenses.asl20;
+    maintainers = with maintainers; [ rushmorem rtreffer deltaevo ];
   };
 }
